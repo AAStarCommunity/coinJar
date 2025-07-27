@@ -49,8 +49,12 @@ export class AAStarSDK {
     }
 
     // 3. Send credential to backend to finalize
-    const { address } = await this.post('/register/finish', { email, attestation });
+    const { address, credentialID } = await this.post('/register/finish', { email, attestation });
     console.log('SDK: Registration finalized. Received address:', address);
+    console.log('SDK: Received credentialID:', credentialID);
+
+    // Store both address and credentialID
+    this.saveLoginInfo({ address, credentialID });
 
     return address;
   }
@@ -59,23 +63,25 @@ export class AAStarSDK {
    * Sends a transaction.
    */
   async sendTransaction(transactionData: { to: string; amount: string }): Promise<string> {
-    const address = await this.getAddress();
-    if (!address) {
+    const loginInfo = this.getLoginInfo();
+    if (!loginInfo) {
       throw new Error('User is not logged in.');
     }
     console.log('SDK: Starting sendTransaction with data:', transactionData);
 
     // 1. Prepare transaction and get challenge from backend
-    const { unsignedUserOpHash } = await this.post('/transaction/prepare', { address, ...transactionData });
+    const { unsignedUserOpHash } = await this.post('/transaction/prepare', { address: loginInfo.address, ...transactionData });
     console.log('SDK: Received unsignedUserOpHash from backend:', unsignedUserOpHash);
 
     // 2. Call Passkey to sign the challenge (UserOperation hash)
     let assertion;
     try {
-      // In a real scenario, the challenge would be part of a PublicKeyCredentialRequestOptions object
-      // For this demo, we simulate this by creating a dummy options object.
       const requestOptions = {
         challenge: Buffer.from(unsignedUserOpHash).toString('base64url'),
+        allowCredentials: [{
+          id: loginInfo.credentialID,
+          type: 'public-key' as const, // Use 'as const' to satisfy the literal type
+        }],
         timeout: 60000,
         rpId: window.location.hostname,
       };
@@ -94,20 +100,17 @@ export class AAStarSDK {
   }
 
   /**
-   * Gets the current user's address.
-   * (For this demo, we'll use localStorage to persist the address after registration)
+   * Gets the current user's login info.
    */
-  async getAddress(): Promise<string | null> {
-    // This is a simplified login check for the demo.
-    // A real implementation would involve a login flow.
-    const address = localStorage.getItem('aastar_user_address');
-    return address;
+  getLoginInfo(): { address: string; credentialID: string } | null {
+    const info = localStorage.getItem('aastar_user_info');
+    return info ? JSON.parse(info) : null;
   }
 
    /**
-   * A helper to store address after registration to simulate a logged-in state.
+   * A helper to store login info to simulate a logged-in state.
    */
-  async setAddress(address: string): Promise<void> {
-    localStorage.setItem('aastar_user_address', address);
+  saveLoginInfo(info: { address: string; credentialID: string }): void {
+    localStorage.setItem('aastar_user_info', JSON.stringify(info));
   }
 }

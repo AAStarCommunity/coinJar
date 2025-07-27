@@ -35,14 +35,16 @@ app.post('/register/start', (req, res) => {
 app.post('/register/finish', (req, res) => {
   const { email, attestation } = req.body;
   console.log(`[API] Received /register/finish for email: ${email}`);
-  console.log('[API] Received attestation object:', JSON.stringify(attestation, null, 2));
+  console.log(`[API] Received attestation object:`, JSON.stringify(attestation, null, 2));
 
   // In a real scenario, you would verify the attestation and create the user.
-  // Here, we just return a fake address.
+  // Here, we just return a fake address and the credentialID.
   const fakeAddress = '0xe24b6f321B0140716a2b671ed0D983bb64E7DaFA';
+  const credentialID = attestation.id; // Extract credentialID from the attestation
+  console.log(`[API] Extracted credentialID: ${credentialID}`);
   console.log(`[API] Returning fake address: ${fakeAddress}`);
 
-  res.json({ address: fakeAddress });
+  res.json({ address: fakeAddress, credentialID: credentialID });
 });
 
 // 3. `POST /transaction/prepare`
