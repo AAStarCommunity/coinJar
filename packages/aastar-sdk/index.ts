@@ -50,11 +50,11 @@ export class AAStarSDK {
 
     // 3. Send credential to backend to finalize
     const { address, credentialID } = await this.post('/register/finish', { email, attestation });
-    console.log('SDK: Registration finalized. Received address:', address);
-    console.log('SDK: Received credentialID:', credentialID);
+    console.log(`SDK-DEBUG: Finalizing registration. Address: ${address}, CredentialID: ${credentialID}`);
 
     // Store both address and credentialID
-    this.saveLoginInfo({ address, credentialID });
+    const loginInfo = { address, credentialID };
+    this.saveLoginInfo(loginInfo);
 
     return address;
   }
@@ -64,8 +64,10 @@ export class AAStarSDK {
    */
   async sendTransaction(transactionData: { to: string; amount: string }): Promise<string> {
     const loginInfo = this.getLoginInfo();
-    if (!loginInfo) {
-      throw new Error('User is not logged in.');
+    console.log('SDK-DEBUG: Retrieved login info for transaction:', loginInfo);
+
+    if (!loginInfo || !loginInfo.credentialID) {
+      throw new Error('User is not logged in or credentialID is missing.');
     }
     console.log('SDK: Starting sendTransaction with data:', transactionData);
 
@@ -73,11 +75,18 @@ export class AAStarSDK {
     const { unsignedUserOpHash } = await this.post('/transaction/prepare', { address: loginInfo.address, ...transactionData });
     console.log('SDK: Received unsignedUserOpHash from backend:', unsignedUserOpHash);
 
+    // A browser-compatible way to convert a string to a base64url string
+    const strToBase64url = (str: string) => {
+      const buffer = new TextEncoder().encode(str);
+      return window.btoa(String.fromCharCode.apply(null, Array.from(new Uint8Array(buffer))))
+        .replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+    }
+
     // 2. Call Passkey to sign the challenge (UserOperation hash)
     let assertion;
     try {
       const requestOptions = {
-        challenge: Buffer.from(unsignedUserOpHash).toString('base64url'),
+        challenge: strToBase64url(unsignedUserOpHash),
         allowCredentials: [{
           id: loginInfo.credentialID,
           type: 'public-key' as const, // Use 'as const' to satisfy the literal type
@@ -85,6 +94,7 @@ export class AAStarSDK {
         timeout: 60000,
         rpId: window.location.hostname,
       };
+      console.log('SDK-DEBUG: Calling startAuthentication with options:', JSON.stringify(requestOptions, null, 2));
       assertion = await startAuthentication(requestOptions);
       console.log('SDK: Passkey authentication successful:', assertion);
     } catch (error) {
@@ -103,14 +113,21 @@ export class AAStarSDK {
    * Gets the current user's login info.
    */
   getLoginInfo(): { address: string; credentialID: string } | null {
-    const info = localStorage.getItem('aastar_user_info');
-    return info ? JSON.parse(info) : null;
+    const infoString = localStorage.getItem('aastar_user_info');
+    console.log(`SDK-DEBUG: Reading 'aastar_user_info' from localStorage: ${infoString}`);
+    if (!infoString) {
+      return null;
+    }
+    const info = JSON.parse(infoString);
+    console.log('SDK-DEBUG: Parsed info from localStorage:', info);
+    return info;
   }
 
    /**
    * A helper to store login info to simulate a logged-in state.
    */
   saveLoginInfo(info: { address: string; credentialID: string }): void {
+    console.log('SDK-DEBUG: Saving login info to localStorage:', info);
     localStorage.setItem('aastar_user_info', JSON.stringify(info));
   }
 }

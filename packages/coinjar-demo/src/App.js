@@ -45,6 +45,16 @@ function App() {
       const address = await sdk.register(email);
       // The SDK now handles saving the login info internally
       setUserAddress(address);
+
+      // --- DEBUGGING --- //
+      console.log('DEMO-DEBUG: Registration complete. Verifying stored info...');
+      const storedInfo = sdk.getLoginInfo();
+      console.log('DEMO-DEBUG: Info read back from localStorage:', storedInfo);
+      if (!storedInfo || !storedInfo.credentialID) {
+        alert('DEBUG ALERT: credentialID was not saved correctly after registration!');
+      }
+      // --- END DEBUGGING --- //
+
     } catch (error) {
       console.error(error);
       alert(`Registration failed: ${error.message}`);
