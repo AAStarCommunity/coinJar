@@ -115,6 +115,39 @@ app.get('/prices', (req, res) => {
   res.json(prices);
 });
 
+// 8. `GET /history`
+app.get('/history', (req, res) => {
+  console.log(`[API] Received /history request`);
+  // Fake transaction history for demo purposes
+  const fakeHistory = [
+    {
+      fiatAmount: '50',
+      fiatCurrency: 'USD',
+      token: 'USDT',
+      tokenAmount: '50.000000',
+      toAddress: '0xAbC123DeF456GhI789JkL012MnP345QrS678TuV90',
+      date: new Date(Date.now() - 86400000).toLocaleString()
+    },
+    {
+      fiatAmount: '200',
+      fiatCurrency: 'THB',
+      token: 'ETH',
+      tokenAmount: '0.001557',
+      toAddress: '0xDeF456GhI789JkL012MnP345QrS678TuV90AbC123',
+      date: new Date(Date.now() - 172800000).toLocaleString()
+    },
+    {
+      fiatAmount: '1000',
+      fiatCurrency: 'RMB',
+      token: 'BTC',
+      tokenAmount: '0.000021',
+      toAddress: '0xGhI789JkL012MnP345QrS678TuV90AbC123DeF456',
+      date: new Date(Date.now() - 259200000).toLocaleString()
+    },
+  ];
+  res.json(fakeHistory);
+});
+
 app.listen(port, () => {
   console.log(`Fake backend listening at http://localhost:${port}`);
 });

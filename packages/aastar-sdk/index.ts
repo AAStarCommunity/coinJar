@@ -79,6 +79,14 @@ export class AAStarSDK {
     return response.json();
   }
 
+  async getHistory(): Promise<any> {
+    const response = await fetch(`${this.backendUrl}/history`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch history');
+    }
+    return response.json();
+  }
+
   // Helper function from previous step
   private strToBase64url(str: string): string {
     const buffer = new TextEncoder().encode(str);
