@@ -101,6 +101,20 @@ app.post('/email/verify-code', (req, res) => {
   }
 });
 
+// 7. `GET /prices`
+app.get('/prices', (req, res) => {
+  console.log(`[API] Received /prices request`);
+  // Fake prices for demo purposes
+  const prices = {
+    'USDT': { 'USD': 1.00, 'CNY': 7.25, 'THB': 36.70 },
+    'USDC': { 'USD': 1.01, 'CNY': 7.32, 'THB': 37.00 },
+    'ETH':  { 'USD': 3500, 'CNY': 25375, 'THB': 128450 },
+    'BTC':  { 'USD': 65000, 'CNY': 471250, 'THB': 2385500 },
+    'PNTS': { 'USD': 0.1, 'CNY': 0.73, 'THB': 3.67 },
+  };
+  res.json(prices);
+});
+
 app.listen(port, () => {
   console.log(`Fake backend listening at http://localhost:${port}`);
 });

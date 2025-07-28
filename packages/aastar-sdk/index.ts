@@ -71,6 +71,14 @@ export class AAStarSDK {
     localStorage.removeItem('aastar_user_info');
   }
 
+  async getPrices(): Promise<any> {
+    const response = await fetch(`${this.backendUrl}/prices`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch prices');
+    }
+    return response.json();
+  }
+
   // Helper function from previous step
   private strToBase64url(str: string): string {
     const buffer = new TextEncoder().encode(str);
