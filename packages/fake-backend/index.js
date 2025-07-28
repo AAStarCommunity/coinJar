@@ -25,7 +25,10 @@ app.post('/register/start', (req, res) => {
     challenge: Buffer.from(challenge).toString('base64url'),
     rp: { name: 'CoinJar Demo' },
     user: { id: email, name: email, displayName: email },
-    pubKeyCredParams: [{ alg: -7, type: 'public-key' }],
+    pubKeyCredParams: [
+      { type: 'public-key', alg: -7 }, // ES256
+      { type: 'public-key', alg: -257 } // RS256
+    ],
     timeout: 60000,
     attestation: 'none'
   });
@@ -72,6 +75,30 @@ app.post('/transaction/broadcast', (req, res) => {
   console.log(`[API] Returning fake txHash: ${fakeTxHash}`);
 
   res.json({ txHash: fakeTxHash });
+});
+
+// 5. `POST /email/send-code`
+app.post('/email/send-code', (req, res) => {
+  const { email } = req.body;
+  console.log(`[API] Received /email/send-code for email: ${email}`);
+  // In a real app, you'd send an email here.
+  // We'll just pretend it was successful.
+  console.log(`[API] Faking sending a verification code to ${email}.`);
+  res.json({ success: true });
+});
+
+// 6. `POST /email/verify-code`
+app.post('/email/verify-code', (req, res) => {
+  const { email, code } = req.body;
+  console.log(`[API] Received /email/verify-code for email: ${email} with code: ${code}`);
+  // In a real app, you'd check the code. Here, any 6-digit code is valid.
+  if (code && code.length === 6) {
+    console.log(`[API] Code for ${email} is valid.`);
+    res.json({ success: true, message: "Email verified." });
+  } else {
+    console.log(`[API] Code for ${email} is invalid.`);
+    res.status(400).json({ success: false, message: "Invalid code." });
+  }
 });
 
 app.listen(port, () => {
