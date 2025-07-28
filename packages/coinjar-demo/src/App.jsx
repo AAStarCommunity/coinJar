@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-// 调整为正确的相对路径，并从 dist 目录导入
-import { AAStarSDK } from '@aastar/sdk'; 
+import { QRCodeSVG } from 'qrcode.react';
+import { AAStarSDK } from '@aastar/sdk';
 
 const sdk = new AAStarSDK({ backendUrl: 'http://localhost:4000' });
 
@@ -10,7 +10,8 @@ const styles = {
   button: { width: '100%', padding: '10px', border: 'none', background: '#007bff', color: 'white', borderRadius: '4px', cursor: 'pointer' },
   address: { background: '#eee', padding: '8px', borderRadius: '4px', wordBreak: 'break-all', marginBottom: '20px' },
   txHash: { background: '#e0ffe0', padding: '8px', borderRadius: '4px', wordBreak: 'break-all', marginTop: '10px' },
-  header: { borderBottom: '1px solid #ccc', paddingBottom: '10px', marginBottom: '20px' }
+  header: { borderBottom: '1px solid #ccc', paddingBottom: '10px', marginBottom: '20px' },
+  qrContainer: { textAlign: 'center', padding: '20px', border: '1px dashed #aaa', borderRadius: '8px', marginTop: '20px' }
 };
 
 function App() {
@@ -18,21 +19,11 @@ function App() {
   const [userAddress, setUserAddress] = useState(null);
   const [txHash, setTxHash] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [paymentUri, setPaymentUri] = useState('');
 
-  // 检查本地是否已存储地址，模拟登录状态
   useEffect(() => {
-    // Automatically clear storage on app start for easy testing
     localStorage.clear();
-    setUserAddress(null); // Also clear the state
-
-    const checkLoginStatus = () => {
-      const info = sdk.getLoginInfo();
-      if (info && info.address) {
-        setUserAddress(info.address);
-      }
-    };
-    // We call it, but it will be null on first load due to the clear above.
-    checkLoginStatus();
+    setUserAddress(null);
   }, []);
 
   const handleRegister = async () => {
@@ -43,18 +34,9 @@ function App() {
     setIsLoading(true);
     try {
       const address = await sdk.register(email);
-      // The SDK now handles saving the login info internally
       setUserAddress(address);
-
-      // --- DEBUGGING --- //
-      console.log('DEMO-DEBUG: Registration complete. Verifying stored info...');
-      const storedInfo = sdk.getLoginInfo();
-      console.log('DEMO-DEBUG: Info read back from localStorage:', storedInfo);
-      if (!storedInfo || !storedInfo.credentialID) {
-        alert('DEBUG ALERT: credentialID was not saved correctly after registration!');
-      }
-      // --- END DEBUGGING --- //
-
+      // Generate EIP-681 payment URI for Sepolia (chain 11155111)
+      setPaymentUri(`ethereum:${address}@11155111`);
     } catch (error) {
       console.error(error);
       alert(`Registration failed: ${error.message}`);
@@ -100,10 +82,18 @@ function App() {
       ) : (
         <div>
           <h3>Welcome!</h3>
-          <p>Your AirAccount Address (on Sepolia):</p>
+          <p>Your AirAccount Address:</p>
           <div style={styles.address}>{userAddress}</div>
 
-          <h3>2. Send a Test Transaction</h3>
+          <div style={styles.qrContainer}>
+            <h4>Your Payment QR Code</h4>
+            {paymentUri && <QRCodeSVG value={paymentUri} size={256} />}
+            <p style={{ fontSize: '12px', color: '#555' }}>
+              Scan with any wallet on <strong>Sepolia Testnet</strong>
+            </p>
+          </div>
+
+          <h3 style={{marginTop: '30px'}}>2. Send a Test Transaction</h3>
           <button onClick={handleSendTransaction} disabled={isLoading} style={styles.button}>
             {isLoading ? 'Sending...' : 'Send Test Transaction'}
           </button>
