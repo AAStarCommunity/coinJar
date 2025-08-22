@@ -6,11 +6,27 @@ AAStar Start 是一个 mock 项目，目的是展示和梳理基于我们 sdk �
 
 
 | **面向用户 (Target User)** | **痛点 (Pain Point)** | **产品 (Product)** | **解决方案 (Solution)** | **核心技术/协议 (Core Technology/Protocol)** |
-| :--- | :--- | :--- | :--- | :--- |
+| :--- |
+| :--- |
+| :--- |
+| :--- |
+| :--- |
 | **C 端 (End User)** | 加密新手入门困难 (Difficult onboarding for crypto novices) | CryptoNewbieShuttle | 提供一套简单易用的新手工具，快速上手加密世界。 (Provides a simple and easy-to-use tools, lowering the learning curve for quick entry into the crypto world.) | AirAccount |
 | **KOL (Key Opinion Leader)** | 普通人被平台白嫖，KOL 流量变现效率低，粉丝互动和转化难以追踪。 (Low traffic monetization efficiency, difficult to track fan interaction and conversion.) | Spores | 提供按效果付费的集客解决方案，精准追踪 KOL 带来的每一次转化，实现高效变现。 (Offers a pay-for-performance customer acquisition solution that accurately tracks every conversion brought by KOLs, achieving efficient monetization.) | SuperPaymaster |
 | **商家 (Merchant)** | 小额加密货币收款流程繁琐，技术门槛和交易费用高。 (Cumbersome process and high transaction fees for receiving small crypto payments.) | CoinJar | 提供便捷的小额加密货币接收工具，简化支付流程，降低交易成本。 (Provides a convenient tool for receiving small crypto payments, simplifying the payment process and reducing transaction costs.) | SuperPaymaster |
 | **社区运营者 (Community Operator)** | 社区缺乏可持续的运营模式和激励机制。 (Lack of sustainable operational models and incentive mechanisms for communities.) | CommunityTapWater | 打造可持续的社区运营解决方案，通过创新的激励方式，促进社区的长期健康发展。 (Creates a sustainable community operation solution that promotes the long-term healthy development of the community through innovative incentive methods.) | COS72 and other foundational protocols |
+
+---
+
+## Live Demo & Test Suite
+
+To provide a hands-on experience, an interactive launchpad and test suite has been created.
+
+**[➡️ Click here to open the DApp Launchpad](./index.html)**
+
+This includes links to all DApp demos and the SuperPaymaster Transaction Test page, which allows for simulating the evaluation plan described in the research papers.
+
+---
 
 ## 产品设计初稿
 ### CoinJar
@@ -71,7 +87,7 @@ AAStar Start 是一个 mock 项目，目的是展示和梳理基于我们 sdk �
 - 利用 EIP-681 标准：
       我们可以让生成的二维码不仅仅是一个地址，而是一个符合 EIP-681 标准的支付链接。它
       可以包含链 ID。例如，一个指向您地址的、请求在 Optimism 链（ID 为 10）上交易的二维
-      码内容会是：ethereum:0xYourAddress@10。大多数现代钱包都能识别这个格式，如果钱
+      码内容会是： ethereum:0xYourAddress@10。大多数现代钱包都能识别这个格式，如果钱
       包当前不在 Optimism 链，它会主动提示用户切换网络。这比让用户手动操作要好得多
 
 ---
@@ -165,10 +181,10 @@ Task 4: CommunityTapWater
          或直接文件路径），或者安装 npm 包，然后引入。
        * 在 App.tsx 中，将模拟的 SDK 替换为真实的 SDK 实例：
 
-   1         import { AAStarSDK } from \'../../aastar-sdk\'; // 
+   1         import { AAStarSDK } from '../../aastar-sdk'; // 
      调整为正确的路径
    2         const sdk = new AAStarSDK({ backendUrl: \
-     'http://localhost:4000\' });
+     'http://localhost:4000' });
 
   当您完成这些步骤后，点击 coinjar-demo 界面上的按钮，将会触发一个完整的流程：
 
@@ -188,14 +204,3 @@ Task 4: CommunityTapWater
    2. npm start (启动服务器)
 
   服务器启动后，它将在 http://localhost:4000
-
-
-
-
-
-
-
-
-
-
-
