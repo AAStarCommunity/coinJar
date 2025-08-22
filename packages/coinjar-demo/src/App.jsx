@@ -318,6 +318,9 @@ function App() {
           )}
         </div>
       )}
+      <div style={{ marginTop: '20px' }}>
+        <a href="http://localhost:8000/">&larr; Back to Launchpad</a>
+      </div>
     </div>
   );
 }
