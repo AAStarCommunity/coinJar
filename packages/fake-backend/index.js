@@ -9,6 +9,11 @@ const port = 4000;
 app.use(cors());
 app.use(bodyParser.json());
 
+app.get('/', (req, res) => {
+  res.send('Welcome to the Fake Backend API for CoinJar Demo. This API provides endpoints for user registration, transaction preparation, and broadcasting.');
+});
+
+
 console.log('Fake backend server starting...');
 
 // 1. `POST /register/start`

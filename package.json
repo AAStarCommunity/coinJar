@@ -1,0 +1,8 @@
+{
+  "name": "start-monorepo",
+  "private": true,
+  "scripts": {
+    "dev:backend": "pnpm --filter fake-backend start",
+    "dev:frontend": "pnpm --filter coinjar-demo dev"
+  }
+}
