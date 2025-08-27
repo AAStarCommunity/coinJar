@@ -1,116 +1,13 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SuperPaymaster Transaction Test</title>
-    <style>
-        body { font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; background-color: #f8f9fa; color: #212529; margin: 0; padding: 2rem; }
-        h1 { text-align: center; color: #0056b3; margin-bottom: 2rem; }
-        .main-container { display: flex; gap: 2rem; max-width: 1200px; margin: auto; }
-        .column { background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); padding: 2rem; flex: 1; }
-        .column h2 { border-bottom: 2px solid #dee2e6; padding-bottom: 0.5rem; margin-top: 0; }
-        .column.traditional { background-color: #f1f3f5; opacity: 0.7; }
-        .column.traditional h2 { color: #868e96; }
-        .column.superpaymaster h2 { color: #0056b3; }
-        .control-group { margin-bottom: 1.5rem; }
-        label { display: block; font-weight: 600; margin-bottom: 0.5rem; color: #495057; }
-        select, button { width: 100%; padding: 0.75rem; border-radius: 6px; border: 1px solid #ced4da; font-size: 1rem; }
-        button { background-color: #007bff; color: white; font-weight: bold; cursor: pointer; transition: background-color 0.2s; }
-        button:hover { background-color: #0056b3; }
-        .btn-group { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-top: 1rem; }
-        #log-output { background-color: #212529; color: #f8f9fa; border-radius: 6px; padding: 1rem; height: 300px; overflow-y: auto; font-family: 'Courier New', Courier, monospace; white-space: pre-wrap; }
-        .step { margin-bottom: 1rem; padding-left: 1.5rem; position: relative; }
-        .step::before { content: '❌'; position: absolute; left: 0; color: #e03131; }
-        .home-link { display: block; text-align: center; margin-top: 2rem; }
-    </style>
-</head>
-<body>
-
-    <h1>SuperPaymaster Evaluation: Workflow Comparison</h1>
-
-    <div class="main-container">
-        <div class="column traditional">
-            <h2>Traditional Workflow</h2>
-            <div class="step">Acquire native token (e.g., ETH) from an exchange.</div>
-            <div class="step">Complete KYC and wait for withdrawal clearance.</div>
-            <div class="step">Create and set up a standard EOA wallet.</div>
-            <div class="step">Transfer tokens from exchange to wallet, paying a fee.</div>
-            <div class="step">If needed, bridge tokens to the correct L2 network, paying more fees.</div>
-            <div class="step">Initiate transaction in DApp.</div>
-            <div class="step">Manually approve gas fees and the final transaction in wallet.</div>
-        </div>
-
-        <div class="column superpaymaster">
-            <h2>SuperPaymaster Workflow (AAStar SDK)</h2>
-            
-            <div class="control-group">
-                <label for="user-scenario">Select User Scenario:</label>
-                <select id="user-scenario">
-                    <option value="alice">Alice (New User)</option>
-                    <option value="bob">Bob (Existing User, No Gas)</option>
-                    <option value="charlie">Experienced User</option>
-                </select>
-            </div>
-
-            <div class="control-group">
-                <label>Select Transaction Type to Test:</label>
-                <div class="btn-group">
-                    <button onclick="runTest('ERC20 Transfer')">ERC20 Transfer</button>
-                    <button onclick="runTest('NFT Mint')">NFT Mint</button>
-                    <button onclick="runTest('DApp Interaction')">DApp Interaction</button>
-                </div>
-            </div>
-
-            <div class="control-group">
-                <label>Test Log Output:</label>
-                <div id="log-output">Simulation logs will appear here...</div>
-            </div>
-        </div>
-    </div>
-
-    <a href="../../index.html" class="home-link">Back to Launchpad</a>
-
-    <script>
-        const logOutput = document.getElementById('log-output');
-
-        function log(message) {
-            const timestamp = new Date().toLocaleTimeString();
-            logOutput.innerHTML += `[${timestamp}] ${message}\n`;
-            logOutput.scrollTop = logOutput.scrollHeight;
-        }
-
-        function runTest(txType) {
-            const userScenario = document.getElementById('user-scenario').value;
-            logOutput.innerHTML = ''; // Clear log
-            log(`Starting test for [${userScenario}] - [${txType}]...`);
-            log('Initializing AAStar SDK...');
-
-            // Simulate SDK interaction
-            setTimeout(() => {
-                log(`SDK: Creating UserOperation for ${txType}...`);
-                const traditionalSteps = Math.floor(Math.random() * 3) + 6; // 6-8 steps
-                const spSteps = 2;
-                const traditionalTime = (Math.random() * 10 + 25).toFixed(1); // 25-35s
-                const spTime = (Math.random() * 2 + 3).toFixed(1); // 3-5s
-                const traditionalCost = (Math.random() * 0.1 + 0.2).toFixed(3);
-                const spCost = (traditionalCost * 0.7 - Math.random() * 0.05).toFixed(3);
-
-                log('SDK: Requesting sponsorship from SuperPaymaster...');
-                setTimeout(() => {
-                    log('SDK: Paymaster signature received.');
-                    log('SDK: Submitting UserOperation to bundler...');
-                    setTimeout(() => {
-                        log('--- TEST COMPLETE ---');
-                        log(`Traditional Workflow (Simulated): ${traditionalSteps} steps, ${traditionalTime}s, $${traditionalCost}`);
-                        log(`SuperPaymaster Workflow (Actual): ${spSteps} steps, ${spTime}s, $${spCost}`);
-                        log('---------------------');
-                        log('Result logged. Ready for next test.');
-                    }, 1500);
-                }, 1000);
-            }, 500);
-        }
-    </script>
-
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + React + TS</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>

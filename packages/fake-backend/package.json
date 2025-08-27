@@ -6,8 +6,11 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "express": "^4.18.2",
+    "@aastar/sdk": "workspace:*",
+    "@simplewebauthn/browser": "^10.0.0",
+    "body-parser": "^1.20.2",
     "cors": "^2.8.5",
-    "body-parser": "^1.20.2"
+    "express": "^4.18.2",
+    "node-cron": "^4.2.1"
   }
 }

@@ -1,102 +1,99 @@
-
+console.log('--- index.js: Start of file ---');
 const express = require('express');
+console.log('--- index.js: express required ---');
 const bodyParser = require('body-parser');
+console.log('--- index.js: body-parser required ---');
 const cors = require('cors');
+console.log('--- index.js: cors required ---');
+const TestOrchestrator = require('./TestOrchestrator'); // <-- Suspect line
+console.log('--- index.js: TestOrchestrator required ---');
 
 const app = express();
+console.log('--- index.js: app created ---');
 const port = 4000;
 
 app.use(cors());
+console.log('--- index.js: cors middleware used ---');
 app.use(bodyParser.json());
+console.log('--- index.js: body-parser middleware used ---');
+
+// --- Existing CoinJar Demo Endpoints ---
+console.log('--- index.js: Registering existing CoinJar Demo Endpoints ---');
 
 app.get('/', (req, res) => {
+  console.log('--- API: / hit ---');
   res.send('Welcome to the Fake Backend API for CoinJar Demo. This API provides endpoints for user registration, transaction preparation, and broadcasting.');
 });
-
-
-console.log('Fake backend server starting...');
+console.log('--- index.js: / registered ---');
 
 // 1. `POST /register/start`
 app.post('/register/start', (req, res) => {
   const { email } = req.body;
   console.log(`[API] Received /register/start for email: ${email}`);
-
-  // In a real scenario, you would generate a challenge compatible with @simplewebauthn/server
   const challenge = `challenge_for_${email}_${Date.now()}`;
   console.log(`[API] Generated challenge: ${challenge}`);
-
-  // This is a simplified fake response. A real one would be a full PublicKeyCredentialCreationOptions object.
   res.json({
     challenge: Buffer.from(challenge).toString('base64url'),
     rp: { name: 'CoinJar Demo' },
     user: { id: email, name: email, displayName: email },
     pubKeyCredParams: [
-      { type: 'public-key', alg: -7 }, // ES256
-      { type: 'public-key', alg: -257 } // RS256
+      { type: 'public-key', alg: -7 },
+      { type: 'public-key', alg: -257 }
     ],
     timeout: 60000,
     attestation: 'none'
   });
 });
+console.log('--- index.js: /register/start registered ---');
 
 // 2. `POST /register/finish`
 app.post('/register/finish', (req, res) => {
   const { email, attestation } = req.body;
   console.log(`[API] Received /register/finish for email: ${email}`);
   console.log(`[API] Received attestation object:`, JSON.stringify(attestation, null, 2));
-
-  // In a real scenario, you would verify the attestation and create the user.
-  // Here, we just return a fake address and the credentialID.
   const fakeAddress = '0xe24b6f321B0140716a2b671ed0D983bb64E7DaFA';
-  const credentialID = attestation.id; // Extract credentialID from the attestation
+  const credentialID = attestation.id;
   console.log(`[API] Extracted credentialID: ${credentialID}`);
   console.log(`[API] Returning fake address: ${fakeAddress}`);
-
   res.json({ address: fakeAddress, credentialID: credentialID });
 });
+console.log('--- index.js: /register/finish registered ---');
 
 // 3. `POST /transaction/prepare`
 app.post('/transaction/prepare', (req, res) => {
   const { address, to, amount } = req.body;
   console.log(`[API] Received /transaction/prepare for address: ${address}`);
   console.log(`[API] Transaction details: to=${to}, amount=${amount}`);
-
-  // In a real scenario, this would be the hash of a UserOperation.
   const unsignedUserOpHash = `hash_for_tx_from_${address}_to_${to}_${Date.now()}`;
   console.log(`[API] Generated unsignedUserOpHash: ${unsignedUserOpHash}`);
-
   res.json({ unsignedUserOpHash });
 });
+console.log('--- index.js: /transaction/prepare registered ---');
 
 // 4. `POST /transaction/broadcast`
 app.post('/transaction/broadcast', (req, res) => {
   const { signedUserOp } = req.body;
   console.log('[API] Received /transaction/broadcast');
   console.log('[API] Received signedUserOp:', JSON.stringify(signedUserOp, null, 2));
-
-  // In a real scenario, you would broadcast this to the blockchain.
-  // Here, we just return a fake transaction hash.
   const fakeTxHash = `0x${Array(64).fill(0).map(() => Math.floor(Math.random() * 16).toString(16)).join('')}`;
   console.log(`[API] Returning fake txHash: ${fakeTxHash}`);
-
   res.json({ txHash: fakeTxHash });
 });
+console.log('--- index.js: /transaction/broadcast registered ---');
 
 // 5. `POST /email/send-code`
 app.post('/email/send-code', (req, res) => {
   const { email } = req.body;
   console.log(`[API] Received /email/send-code for email: ${email}`);
-  // In a real app, you'd send an email here.
-  // We'll just pretend it was successful.
   console.log(`[API] Faking sending a verification code to ${email}.`);
   res.json({ success: true });
 });
+console.log('--- index.js: /email/send-code registered ---');
 
 // 6. `POST /email/verify-code`
 app.post('/email/verify-code', (req, res) => {
   const { email, code } = req.body;
   console.log(`[API] Received /email/verify-code for email: ${email} with code: ${code}`);
-  // In a real app, you'd check the code. Here, any 6-digit code is valid.
   if (code && code.length === 6) {
     console.log(`[API] Code for ${email} is valid.`);
     res.json({ success: true, message: "Email verified." });
@@ -105,11 +102,11 @@ app.post('/email/verify-code', (req, res) => {
     res.status(400).json({ success: false, message: "Invalid code." });
   }
 });
+console.log('--- index.js: /email/verify-code registered ---');
 
 // 7. `GET /prices`
 app.get('/prices', (req, res) => {
   console.log(`[API] Received /prices request`);
-  // Fake prices for demo purposes
   const prices = {
     'USDT': { 'USD': 1.00, 'CNY': 7.25, 'THB': 36.70 },
     'USDC': { 'USD': 1.01, 'CNY': 7.32, 'THB': 37.00 },
@@ -119,11 +116,11 @@ app.get('/prices', (req, res) => {
   };
   res.json(prices);
 });
+console.log('--- index.js: /prices registered ---');
 
 // 8. `GET /history`
 app.get('/history', (req, res) => {
   console.log(`[API] Received /history request`);
-  // Fake transaction history for demo purposes
   const fakeHistory = [
     {
       fiatAmount: '50',
@@ -152,7 +149,50 @@ app.get('/history', (req, res) => {
   ];
   res.json(fakeHistory);
 });
+console.log('--- index.js: /history registered ---');
+
+// --- Test Orchestration Endpoints ---
+console.log('--- index.js: Registering Test Orchestration Endpoints ---');
+
+const orchestrator = new TestOrchestrator();
+console.log('--- index.js: orchestrator instantiated ---');
+
+app.post('/test/start', (req, res) => {
+  console.log('--- API: /test/start hit ---');
+  orchestrator.start();
+  res.status(200).json({ message: 'Test orchestration started.' });
+});
+console.log('--- index.js: /test/start registered ---');
+
+app.post('/test/stop', (req, res) => {
+  console.log('--- API: /test/stop hit ---');
+  orchestrator.stop();
+  res.status(200).json({ message: 'Test orchestration stopped.' });
+});
+console.log('--- index.js: /test/stop registered ---');
+
+app.get('/test/status', (req, res) => {
+  console.log('--- API: /test/status hit ---');
+  const status = orchestrator.getStatus();
+  res.status(200).json(status);
+});
+console.log('--- index.js: /test/status registered ---');
+
+app.get('/test/results', (req, res) => {
+  console.log('--- API: /test/results hit ---');
+  const format = req.query.format;
+  const results = orchestrator.getResults(format);
+  if (format === 'csv') {
+    res.header('Content-Type', 'text/csv');
+    res.send(results);
+  } else {
+    res.json(results);
+  }
+});
+console.log('--- index.js: /test/results registered ---');
 
 app.listen(port, () => {
   console.log(`Fake backend listening at http://localhost:${port}`);
+  console.log('--- index.js: Server listening callback executed ---');
 });
+console.log('--- index.js: End of file ---');

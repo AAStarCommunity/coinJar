@@ -1,0 +1,46 @@
+{
+  "tasks": [
+    {
+      "id": 1,
+      "title": "Setup Frontend Environment",
+      "description": "Create a new Vue or React project for the transaction-test-demo.",
+      "dependencies": []
+    },
+    {
+      "id": 2,
+      "title": "Implement Frontend UI",
+      "description": "Implement the UI for the transaction-test-demo with a control panel for environment setup, test initiation, real-time data display, and result export.",
+      "dependencies": [1]
+    },
+    {
+      "id": 3,
+      "title": "Setup Backend Environment",
+      "description": "Create a new Node.js project for the backend service or extend the existing fake-backend.",
+      "dependencies": []
+    },
+    {
+      "id": 4,
+      "title": "Implement Backend API",
+      "description": "Implement the API for receiving test initiation commands from the frontend.",
+      "dependencies": [3]
+    },
+    {
+      "id": 5,
+      "title": "Implement Test Scheduler",
+      "description": "Implement a test scheduler on the backend to execute transactions at a preset frequency and of different types.",
+      "dependencies": [4]
+    },
+    {
+      "id": 6,
+      "title": "Integrate AAStar SDK",
+      "description": "Integrate the AAStar_SDK into the backend to execute both traditional and SuperPaymaster-integrated transactions.",
+      "dependencies": [5]
+    },
+    {
+      "id": 7,
+      "title": "Implement Data Recording",
+      "description": "Implement data recording on the backend to store detailed data for each transaction.",
+      "dependencies": [6]
+    }
+  ]
+}
