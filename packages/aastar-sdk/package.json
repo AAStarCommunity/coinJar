@@ -9,6 +9,11 @@
       "import": "./dist/index.js",
       "require": "./dist/index.js",
       "default": "./dist/index.js"
+    },
+    "./dist/network/NetworkManager": {
+      "types": "./dist/network/NetworkManager.d.ts",
+      "import": "./dist/network/NetworkManager.js",
+      "require": "./dist/network/NetworkManager.js"
     }
   },
   "scripts": {
@@ -22,6 +27,7 @@
   },
   "dependencies": {
     "@account-abstraction/sdk": "^0.6.0",
+    "@simplewebauthn/browser": "^10.0.0",
     "viem": "^1.19.11"
   }
 }
