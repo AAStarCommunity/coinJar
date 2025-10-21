@@ -1,51 +1,107 @@
-'''<!DOCTYPE html>
+'''<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AAStar Project Starter & DApp Launchpad</title>
-    <style>
-        body { font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; background-color: #f4f7f9; color: #333; margin: 0; padding: 2rem; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .container { background-color: #ffffff; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.1); padding: 2rem 3rem; max-width: 800px; width: 100%; text-align: center; }
-        h1 { color: #1a202c; margin-bottom: 1rem; }
-        p { color: #5a677d; margin-bottom: 2.5rem; font-size: 1.1rem; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
-        .card { background-color: #f9fafb; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.5rem; text-decoration: none; color: #333; transition: all 0.3s ease; }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 4px 20px rgba(0,0,0,0.08); border-color: #4a90e2; }
-        .card h2 { margin: 0 0 0.5rem 0; color: #2d3748; }
-        .card p { font-size: 0.9rem; color: #718096; margin: 0; }
-        .test-card { background-color: #e6f4ff; border-color: #4a90e2; }
-        .test-card h2 { color: #2b6cb0; }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <a href="https://aastar.io" target="_blank"><img src="https://raw.githubusercontent.com/jhfnetboy/MarkDownImg/main/img/202505031325963.png" alt="AAStar Logo" style="width: 16%;" /></a>
-        <h1>AAStar DApp Launchpad</h1>
-        <p>A collection of demos and tools built on the AAStar SDK, showcasing the power of AirAccount, SuperPaymaster, and more.</p>
-        <div class="grid">
-            <a href="http://localhost:5173/index.html" class="card">
-                <h2>CoinJar</h2>
-                <p>Simple crypto payments for small merchants.</p>
-            </a>
-            <a href="./shuttle.html" class="card">
-                <h2>CryptoNewbieShuttle</h2>
-                <p>Easy onboarding tools for crypto novices.</p>
-            </a>
-            <a href="./spores.html" class="card">
-                <h2>Spores</h2>
-                <p>Pay-for-performance marketing and revenue sharing.</p>
-            </a>
-            <a href="./tapwater.html" class="card">
-                <h2>CommunityTapWater</h2>
-                <p>Sustainable operations and incentives for communities.</p>
-            </a>
-            <a href="./transaction_test.html" class="card test-card">
-                <h2>SuperPaymaster Transaction Test</h2>
-                <p>Run comparative workflow tests based on the research evaluation plan.</p>
-            </a>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>AAStar Project Starter & DApp Launchpad</title>
+        <style>
+            body {
+                font-family:
+                    system-ui,
+                    -apple-system,
+                    BlinkMacSystemFont,
+                    "Segoe UI",
+                    Roboto,
+                    Oxygen,
+                    Ubuntu,
+                    Cantarell,
+                    "Open Sans",
+                    "Helvetica Neue",
+                    sans-serif;
+                background-color: #f4f7f9;
+                color: #333;
+                margin: 0;
+                padding: 2rem;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+            }
+            .container {
+                background-color: #ffffff;
+                border-radius: 12px;
+                box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+                padding: 2rem 3rem;
+                max-width: 800px;
+                width: 100%;
+                text-align: center;
+            }
+            h1 {
+                color: #1a202c;
+                margin-bottom: 1rem;
+            }
+            p {
+                color: #5a677d;
+                margin-bottom: 2.5rem;
+                font-size: 1.1rem;
+            }
+            .grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 1.5rem;
+            }
+            .card {
+                background-color: #f9fafb;
+                border: 1px solid #e2e8f0;
+                border-radius: 8px;
+                padding: 1.5rem;
+                text-decoration: none;
+                color: #333;
+                transition: all 0.3s ease;
+            }
+            .card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+                border-color: #4a90e2;
+            }
+            .card h2 {
+                margin: 0 0 0.5rem 0;
+                color: #2d3748;
+            }
+            .card p {
+                font-size: 0.9rem;
+                color: #718096;
+                margin: 0;
+            }
+            .test-card {
+                background-color: #e6f4ff;
+                border-color: #4a90e2;
+            }
+            .test-card h2 {
+                color: #2b6cb0;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <a href="https://aastar.io" target="_blank"
+                ><img
+                    src="https://raw.githubusercontent.com/jhfnetboy/MarkDownImg/main/img/202505031325963.png"
+                    alt="AAStar Logo"
+                    style="width: 16%"
+            /></a>
+            <h1>AAStar DApp Launchpad</h1>
+            <p>
+                A collection of demos and tools built on the AAStar SDK,
+                showcasing the power of AirAccount, SuperPaymaster, and more.
+            </p>
+            <div class="grid">
+                <a href="http://localhost:5173/index.html" class="card">
+                    <h2>CoinJar</h2>
+                    <p>Simple crypto payments for small merchants.</p>
+                </a>
+            </div>
         </div>
-    </div>
-</body>
+    </body>
 </html>
 '''
