@@ -1,5 +1,6 @@
 # Transaction Testing System
 
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 This project provides a comprehensive system for testing and orchestrating blockchain transactions, focusing on Account Abstraction (AA) and Paymaster functionalities. It includes a backend API for test control and metrics collection, and a frontend for visualization and interaction.
 
 ## Features
@@ -88,3 +89,7 @@ The frontend will be accessible at `http://localhost:5173` (or another port if 5
 - Add more sophisticated gas estimation and transaction validation.
 - Integrate with real testnet faucets for funding test accounts.
 - Implement a proper database for persistent storage of test results.
+
+## License
+
+Licensed under the [Apache License, Version 2.0](https://opensource.org/licenses/Apache-2.0). See [LICENSE](./LICENSE) for details.
